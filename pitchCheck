@@ -1,0 +1,68 @@
+public class pitchCheck{
+	/*
+		x -> target fequency.
+		y -> user frequency.
+	*/
+
+	double x = 0;
+	double y = 0;
+
+	/*
+		Tinit -> start time
+		Tcurr -> current time
+	*/
+
+	long Tinit = 0;
+	long Tcurr = 0;
+
+	/*
+		first -> true if first time through the while loop
+	*/
+
+	boolean first = true;
+
+	public double getPitch(){
+		// code here.
+	}
+
+	public double setRange(x){
+		// set acceptable range 1 cent above/below target pitch.
+
+		return x/1200;
+	}
+
+	public void checkPitch(){
+		Tinit = System.currentTimeMillis();
+		Tcurr = Tinit; 
+		while(Tcurr - Tinit < 2000){
+			y = getPitch();
+			if(y - x > x + 0.15x){
+				System.out.println("Too high!");
+			}
+
+			if(x - y > x + 0.15x){
+				System.out.println("Too low!");
+			}
+
+			// if user is in tune
+			if(abs(x - y) < (x/1200)){
+				Tcurr = System.currentTimeMillis();
+			} else{
+				Tinit = System.currentTimeMillis();
+				Tcurr = Tinit; 
+			}
+		}
+
+		System.out.println("You did it!");
+	}
+
+
+	}
+
+	public static void main(string[] args){
+
+
+
+	}
+
+}

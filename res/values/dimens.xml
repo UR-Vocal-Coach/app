@@ -3,5 +3,17 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <!-- UI element margins -->
+    <dimen name="scale_marker_marginBottom">20dip</dimen>
+    <dimen name="target_note_x">45dip</dimen>
+    <dimen name="target_note_y">160dip</dimen>
+    <dimen name="user_note_x">200dip</dimen>
+    <dimen name="user_note_y">160dip</dimen>
+    <dimen name="note_label">12dip</dimen>
+    
+    <!-- UI element font sizes -->
+    <dimen name="note_label_letter">30sp</dimen>
+    <dimen name="note_label_freq">12sp</dimen>
 
 </resources>

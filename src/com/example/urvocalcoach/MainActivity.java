@@ -2,16 +2,33 @@ package com.example.urvocalcoach;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
-
+	
+	private UiController uiController;
+	
+	private AudioAnalyzer analyzer;
+	
+	private TextView userNote;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+			analyzer = new  AudioAnalyzer();
+			uiController = new UiController(this);
+			analyzer.addObserver(uiController);
+			userNote = (TextView)findViewById(R.id.user_note_freq);
+		} catch (Exception e) {
+			Toast.makeText(this, "The are problems with your microphone :(", Toast.LENGTH_LONG ).show();
+		}
     }
 
 
@@ -32,5 +49,47 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }   
+    
+    public void displayMessage(String message) {
+    	userNote.setText(message);
     }
+    
+    
+    @Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+        if(analyzer!=null)
+        	analyzer.ensureStarted();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+        if(analyzer!=null)
+        	analyzer.start();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+        if(analyzer!=null)
+        	analyzer.stop();
+	}
 }

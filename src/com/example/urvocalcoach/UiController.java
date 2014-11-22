@@ -2,14 +2,24 @@ package com.example.urvocalcoach;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.example.urvocalcoach.AudioAnalyzer.AnalyzedSound;
+import com.example.urvocalcoach.Tuning.MusicNote;
 
 
 public class UiController implements Observer {
 
 	private MainActivity ui;
 	private double frequency;
+	private ExecutorService executor;
+	private boolean tactileFeed;
+	private boolean toneMatch;
+	private boolean show;
+	private Tuning tuning;
+	private MusicNote targetNote;
+	private MusicNote currentNote;
 	
 	private enum MessageClass {
 		TUNING_IN_PROGRESS,
@@ -18,14 +28,13 @@ public class UiController implements Observer {
 		TOO_NOISY,
 	}
 	
-	MessageClass message;
-	MessageClass previouslyProposedMessage;
-	MessageClass proposedMessage; // needs to get X consecutive votes.
-	private int numberOfVotes;
-	private final int minNumberOfVotes = 3; // X.
-	
 	public UiController(MainActivity u) {
 		ui = u;
+		executor = Executors.newFixedThreadPool(4);
+		frequency = Double.NaN;
+		tuning = new Tuning();
+		targetNote = tuning.getNote(262.5);
+		currentNote = tuning.getNote(0);
 	}
 	
 	@Override
@@ -33,89 +42,49 @@ public class UiController implements Observer {
 		if(who instanceof AudioAnalyzer) {
 			if(obj instanceof AnalyzedSound) {
 				AnalyzedSound result = (AnalyzedSound)obj;
-				// result.getDebug();
 				frequency = FrequencySmoothener.getSmoothFrequency(result);
-				String message = frequency + " :";
-				ui.displayMessage(message);
-//				System.out.print(message);
-//				if(result.error==AnalyzedSound.ReadingType.BIG_FREQUENCY ||
-//						result.error==AnalyzedSound.ReadingType.BIG_VARIANCE ||
-//						result.error==AnalyzedSound.ReadingType.ZERO_SAMPLES)
-//					proposedMessage = MessageClass.TOO_NOISY;
-//				else if(result.error==AnalyzedSound.ReadingType.TOO_QUIET)
-//					proposedMessage = MessageClass.TOO_QUIET;
-//				else if(result.error==AnalyzedSound.ReadingType.NO_PROBLEMS)
-//					proposedMessage = MessageClass.TUNING_IN_PROGRESS;
-//				else {
-//					Log.e(TAG, "UiController: Unknown class of message.");
-//					proposedMessage=null;
-//				}
-//				if(ConfigFlags.uiControlerInformsWhatItKnowsAboutSound)
-//					result.getDebug();
-				//Log.e(TAG,"Frequency: " + frequency);
-//				updateUi();
-			} /*else if(obj instanceof ArrayToDump) {
-				ArrayToDump a = (ArrayToDump)obj;
-				ui.dumpArray(a.arr, a.elements);
-			}*/
+				if(frequency > 0.0) {
+					currentNote = tuning.getNote(frequency);
+					ui.displayMessage(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex());
+//					ui.translateNotes(targetNote.getIndex() - currentNote.getIndex());
+					toneMatch = false;
+					if(!show) {
+						show = true;
+						ui.displayFeedBack(show);
+					}
+				} else {
+					if(show) {
+						show = false;
+						ui.displayFeedBack(show);
+					}
+				}
+			}
 		}
 	}
 	
-	/*private void updateUi() {
-		GuitarString current = tuning.getString(frequency);
-		// Mark a string in red on a big picture of guitar.
-		ui.changeString(current.stringId);
+	public void startTactileFeedBack() {
+		tactileFeed = true;
+		Thread tactileFeedBack = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				long start = System.currentTimeMillis(), end ;
+				while(tactileFeed) {
+					if(currentNote.getFrequency() == targetNote.getFrequency()) {
+						end = System.currentTimeMillis();
+						if(end - start >= 2000) {
+							toneMatch = true;
+							//tactileFeed = false;
+						}
+					} else {
+						start = System.currentTimeMillis();
+					}
+				}
+			}
+		});
+		executor.execute(tactileFeedBack);
+	}
+	
+	public void stopTactileFeedBack() {
 		
-		// Change color of your guitar.
-
-		double match = 0.0; // How close is current frequency to the desired 
-		                    // frequency in 0..1 scale.
-		if(current.stringId == 0) {
-			match = 0.0;
-		} else {
-			if(frequency<current.freq) {
-				match = (frequency-current.minFreq)/(current.freq-current.minFreq);
-			} else {
-				match = (current.maxFreq - frequency )/(current.maxFreq-current.freq);
-			}
-		}
-		ui.coloredGuitarMatch(Math.pow(match, 1.5));
-		
-		// Update message. 
-		// If cannot decide on a string
-		if(proposedMessage == MessageClass.TUNING_IN_PROGRESS && current.stringId == 0)
-			proposedMessage = MessageClass.WEIRD_FREQUENCY;
-		if(message == null) {
-			message = previouslyProposedMessage = proposedMessage;
-		} if(message == proposedMessage) {
-			// do nothing.
-		} else {
-			if(previouslyProposedMessage != proposedMessage) {
-				previouslyProposedMessage = proposedMessage;
-				numberOfVotes = 1;
-			} else if(previouslyProposedMessage == proposedMessage) {
-				numberOfVotes++;
-			}
-			if(numberOfVotes >= minNumberOfVotes) {
-				message = proposedMessage;
-			}
-		}
-		switch(message) {
-			case TUNING_IN_PROGRESS:
-				ui.displayMessage("Currently tuning string " + current.name +
-						" from " + tuning.getName() + " tuning, matched in " + 
-						Math.round(100.0*match) + "%.", true);
-				break;
-			case TOO_NOISY:
-				ui.displayMessage("Please reduce background noise (or play louder).", false);
-				break;
-			case TOO_QUIET:
-				ui.displayMessage("Please play louder!", false);
-				break;
-			case WEIRD_FREQUENCY:
-				ui.displayMessage("Are you sure instrument you are playing is guitar? :)", false);
-			default:
-				Log.d(TAG, "No message");
-		}
-	}*/
+	}
 }

@@ -1,129 +1,127 @@
 package com.example.urvocalcoach;
 
-import android.app.Activity;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 public class Tuning {
 	public static final String TAG = "RealGuitarTuner";
-
-	private static class TuningType {
-		public String humanReadableName;
-		public double [] freqs;
-		public String [] stringNames;
-		public TuningType(String name, double [] f, String [] sn) {
-			humanReadableName = name;
-			freqs = f;
-			stringNames = sn;
+	
+	private static final MusicNote[] notesArray = new MusicNote[60];
+	
+	private static final int TOP = 60;
+	
+	public Tuning() {
+		initNoteMap();
+	}
+	
+	private void initNoteMap() {
+		double[] freqArray = new double[60];
+		StringBuilder sb = new StringBuilder(3);
+		freqArray[0] = 65.41;freqArray[1] = 69.30;freqArray[2] = 73.42;freqArray[3] = 77.78;freqArray[4] = 82.41;
+		freqArray[5] = 87.31;freqArray[6] = 92.50;freqArray[7] = 98.00;freqArray[8] = 103.83;freqArray[9] = 110.00;freqArray[10] = 116.54;
+		freqArray[11] = 123.47;freqArray[12] = 130.81;freqArray[13] = 138.59;freqArray[14] = 146.83;freqArray[15] = 155.56;
+		freqArray[16] = 164.81;freqArray[17] = 174.61;freqArray[18] = 185.00;freqArray[19] = 196.00;freqArray[20] = 207.65;freqArray[21] = 220.00;
+		freqArray[22] = 233.08;freqArray[23] = 246.94;freqArray[24] = 261.63;freqArray[25] = 277.18;freqArray[26] = 293.66;freqArray[27] = 311.13;
+		freqArray[28] = 329.63;freqArray[29] = 349.23;freqArray[30] = 369.99;freqArray[31] = 392.00;freqArray[32] = 415.30;freqArray[33] = 440.00;
+		freqArray[34] = 466.16;freqArray[35] = 493.88;freqArray[36] = 523.25;freqArray[37] = 554.37;freqArray[38] = 587.33;
+		freqArray[39] = 622.25;freqArray[40] = 659.25;freqArray[41] = 698.46;freqArray[42] = 739.99;freqArray[43] = 783.99;
+		freqArray[44] = 830.61;freqArray[45] = 880.00;freqArray[46] = 932.33;freqArray[47] = 987.77;freqArray[48] = 1046.50;
+		freqArray[49] = 1108.73;freqArray[50] = 1174.66;freqArray[51] = 1244.51;freqArray[52] = 1318.51;
+		freqArray[53] = 1396.91;freqArray[54] = 1479.98;freqArray[55] = 1567.98;freqArray[56] = 1661.22;
+		freqArray[57] = 1760.00;freqArray[58] = 1864.66;freqArray[59] = 1975.53;
+		int counter = 0, octave = 2;
+		while(counter < freqArray.length) {
+			sb.append("C").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("C#").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("D").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("D#").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("E").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("F").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("F#").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("G").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("G#").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("A").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("A#").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);sb.append("B").append(octave);
+			notesArray[counter] = new MusicNote(freqArray[counter], sb.toString(), counter++);
+			sb.setLength(0);
+			octave++;
 		}
 	}
 	
-	private static TuningType [] tuningTypes = new TuningType[]{
-		new TuningType("Standard",
-				new double[]{82.41, 110.00, 146.83, 196.00, 246.94, 329.63},
-				new String[]{"E","A","D","G","B","E"}) ,
-		new TuningType("Down a half step",
-				new double[]{77.78, 103.83, 138.59, 185.00, 233.08, 311.13},
-				new String[]{"D#","G#","C#","F#","A#","D#"}) ,
-		new TuningType("Dropped D",
-				new double[]{73.42, 110.00, 146.83, 196.00, 246.94, 329.63},
-				new String[]{"D","A","D","G","B","E"}) ,
-		new TuningType("Double Dropped D",
-				new double[]{73.42, 110.00, 146.83, 196.00, 246.94, 293.66},
-				new String[]{"D","A","D","G","B","D"}) ,
-		new TuningType("Open A",
-				new double[]{82.41, 110.00, 164.81, 220.00, 277.18, 329.63},
-				new String[]{"E","A","E","A","C#","E"}) ,
-		new TuningType("Open C",
-				new double[]{65.41, 98.00, 130.81, 196.00, 261.63, 329.63},
-				new String[]{"C","G","C","G","C","E"}) ,
-		new TuningType("Open D",
-				new double[]{73.42, 110.00, 146.83, 185.00, 220.00, 293.66},
-				new String[]{"D","A","D","F#","A","D"}) ,
-		new TuningType("Open E",
-				new double[]{82.41, 123.47, 164.81, 207.65, 246.94, 329.63},
-				new String[]{"E","B","E","G#","B","E"}) ,
-		new TuningType("Open Em",
-				new double[]{82.41, 123.47, 164.81, 196.00, 246.94, 329.63},
-				new String[]{"E","B","E","G","B","E"}) ,
-		new TuningType("Open G",
-				new double[]{98.00, 123.47, 146.83, 196.00, 246.94, 293.66},
-				new String[]{"G","B","D","G","B","D"}) ,
-	};
 	
-	public static void populateSpinner(Activity parent, Spinner s) {
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(parent, 
-				android.R.layout.simple_spinner_item);
-		for(int i=0; i<tuningTypes.length; ++i) {
-			String label=tuningTypes[i].humanReadableName + " (";
-			for(int j=0; j<tuningTypes[i].stringNames.length; ++j) {
-				label+=tuningTypes[i].stringNames[j] + 
-				((j==tuningTypes[i].stringNames.length -1) ? ")": ",");
+	public MusicNote getNote(double frequency) {
+		int low = - 1, high = TOP, curr = 0;
+		double highChk, lowChk, min;
+		MusicNote retVal;
+		while(high - low > 1) {
+			curr = (high + low)/2;
+			if(notesArray[curr].getFrequency() < frequency) {
+				low = curr;
+			} else {
+				high = curr;
 			}
-			adapter.add(label);
 		}
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    s.setAdapter(adapter);
+		if(curr < TOP - 1 && curr > 0) {
+			highChk = notesArray[curr + 1].getFrequency() - frequency;
+			lowChk = frequency - notesArray[curr - 1].getFrequency();
+			if(frequency > notesArray[curr].getFrequency()) {
+				min = frequency - notesArray[curr].getFrequency();				
+			} else {
+				min = notesArray[curr].getFrequency() - frequency;
+			}
+			if(highChk < min) {
+				if(highChk < lowChk) {
+					retVal = notesArray[curr + 1];
+				} else {
+					retVal = notesArray[curr - 1];
+				}
+			} else {
+				if(min < lowChk) {
+					retVal = notesArray[curr];
+				} else {
+					retVal = notesArray[curr - 1];
+				}
+			}
+		} else {
+			retVal = notesArray[curr];
+		}
+		return retVal;
 	}
 	
-	public class GuitarString {
-		public int stringId; // no of string in the order of ascending frequency
-		public double minFreq;
-		public double maxFreq;
-		public double freq;
-		public String name;
-		public GuitarString(int s,double f, double mif, double maf, String n) {
-			stringId=s;
-			freq=f;
-			minFreq=mif;
-			maxFreq=maf;
-			name=n;
+	public static class MusicNote {
+		
+		private double frequency;
+		
+		private String note;
+		
+		private int index;
+
+		public MusicNote(double frequency, String note, int index) {
+			this.frequency = frequency;
+			this.note = note;
+			this.index = index;
 		}
-	}
-	private final GuitarString zeroString = new GuitarString(0,0.0,0.0,0.0,"0");
-	private GuitarString [] strings;
-	private String humanReadableName;
-	private int tuningId = 0;
-	
-	public int getTuningId() {
-		return tuningId;
-	}
-	public void initStrings(double [] freqs, String [] names) {
-		strings = new GuitarString[freqs.length];
-		for(int i=0; i<freqs.length; ++i) {
-			double ldist = (i==0) ? 0.75*(2*freqs[i]-(freqs[i]+freqs[i+1])/2) 
-					              : (freqs[i]+freqs[i-1])/2;
-			double rdist = (i==freqs.length-1) ? 1.5*(2*freqs[i] - (freqs[i]+freqs[i-1])/2)
-					                           : (freqs[i]+freqs[i+1])/2;
-			//Log.e(TAG, "" + freqs[i] + ": " + (ldist) + " " + rdist);
-			strings[i]=new GuitarString(i+1,freqs[i],ldist,rdist, names[i]);
+
+		public double getFrequency() {
+			return frequency;
 		}
-	}
-/*
-	private void outputStringsFrequencies() {
-		for(int i=0; i<strings.length; ++i) {
-			Log.d(TAG, strings[i].name + ": " + strings[i].freq + " e [" + 
-					strings[i].minFreq + "," + strings[i].maxFreq + "]");
+
+		public String getNote() {
+			return note;
 		}
-	}
-*/
-	public Tuning(int tuningNumber) {
-		initStrings(tuningTypes[tuningNumber].freqs,
-				    tuningTypes[tuningNumber].stringNames);
-		humanReadableName = tuningTypes[tuningNumber].humanReadableName;
-		tuningId = tuningNumber;
-		//outputStringsFrequencies();
-	}
-	
-	public String getName() {
-		return humanReadableName;
-	}
-	
-	GuitarString getString(double frequency) {
-		for(int i=0; i<strings.length; ++i) {
-			if(strings[i].minFreq <=frequency && frequency<=strings[i].maxFreq)
-				return strings[i];
+
+		public int getIndex() {
+			return index;
 		}
-		return zeroString;
 	}
 }

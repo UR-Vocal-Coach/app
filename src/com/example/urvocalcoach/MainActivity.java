@@ -2,11 +2,15 @@ package com.example.urvocalcoach;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.urvocalcoach.Tuning.MusicNote;
 
 
 public class MainActivity extends Activity {
@@ -15,7 +19,17 @@ public class MainActivity extends Activity {
 	
 	private AudioAnalyzer analyzer;
 	
+	private TextView userFreq;
+	
+	private ImageView userNoteImg;
+	
 	private TextView userNote;
+	
+	private Vibrator vibrator;
+	
+	private long bottom;
+	
+	private long top;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +39,13 @@ public class MainActivity extends Activity {
 			analyzer = new  AudioAnalyzer();
 			uiController = new UiController(this);
 			analyzer.addObserver(uiController);
-			userNote = (TextView)findViewById(R.id.user_note_freq);
+			userFreq = (TextView)findViewById(R.id.user_note_freq);
+			userNoteImg = (ImageView)findViewById(R.id.user_note);
+			userNote = (TextView)findViewById(R.id.user_note_letter);
+			this.displayFeedBack(false);
+			vibrator = (Vibrator) getApplicationContext().getSystemService(VIBRATOR_SERVICE);
+			top = findViewById(R.id.scale_marker_1).getTop();
+			bottom = findViewById(R.id.scale_marker_21).getTop();
 		} catch (Exception e) {
 			Toast.makeText(this, "The are problems with your microphone :(", Toast.LENGTH_LONG ).show();
 		}
@@ -51,10 +71,31 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }   
     
-    public void displayMessage(String message) {
-    	userNote.setText(message);
+    public void displayMessage(MusicNote note, boolean tactileFeed, int position) {
+    	userFreq.setText(Double.toString(note.getFrequency()));
+    	userNote.setText(note.getNote());
+    	position = position * 25;
+    	userFreq.setTranslationY(position);
+    	userNote.setTranslationY(position);
+    	userNoteImg.setTranslationY(position);
+    	if(tactileFeed) {
+//    		analyzer.stop();
+//    		uiController.stopFeedBack();
+    		vibrator.vibrate(200);
+    	}
     }
     
+    public void displayFeedBack(boolean show) {
+    	if(show) {
+    		userFreq.setVisibility(View.VISIBLE);
+    		userNote.setVisibility(View.VISIBLE);
+    		userNoteImg.setVisibility(View.VISIBLE);    		
+    	} else {
+    		userFreq.setVisibility(View.INVISIBLE);
+    		userNote.setVisibility(View.INVISIBLE);
+    		userNoteImg.setVisibility(View.INVISIBLE);
+    	}
+    }
     
     @Override
 	protected void onDestroy() {
@@ -75,21 +116,30 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-        if(analyzer!=null)
+        if(analyzer!=null) {
         	analyzer.ensureStarted();
+        }
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-        if(analyzer!=null)
+        if(analyzer!=null) {
         	analyzer.start();
+        }
+        if(uiController != null) {
+        	uiController.startTactileFeedBack();
+        }
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-        if(analyzer!=null)
-        	analyzer.stop();
+        if(analyzer!=null) {
+        	analyzer.stop();        	
+        }
+        if(uiController != null) {
+        	uiController.stopTactileFeedBack();
+        }
 	}
 }

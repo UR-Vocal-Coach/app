@@ -6,6 +6,7 @@ import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -25,36 +26,38 @@ public class MainActivity extends Activity {
 	
 	private ImageView userNoteImg;
 	
-	private TextView targetNote;
-	
 	private TextView targetFreq;
 	
 	private TextView userNote;
 	
 	private Vibrator vibrator;
 	
-	private Spinner spinner;
+	private Spinner noteSelector;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
-			analyzer = new  AudioAnalyzer();
-			uiController = new UiController(this);
-			analyzer.addObserver(uiController);
+        	analyzer = new  AudioAnalyzer();
+        	uiController = new UiController(this);
 			userFreq = (TextView)findViewById(R.id.user_note_freq);
 			userNoteImg = (ImageView)findViewById(R.id.user_note);
 			userNote = (TextView)findViewById(R.id.user_note_letter);
+			noteSelector = (Spinner)findViewById(R.id.spinner_targetNote);
+			analyzer.addObserver(uiController);
+			String defaultNote = this.getResources().getString(R.string.default_note);
 			Button button = (Button)findViewById(R.id.target_note_sing);
 			button.setOnClickListener(uiController);
 			button.setOnTouchListener(uiController);
-//			spinner = (Spinner)findViewById(R.id.user_note_letter);
 			this.displayFeedBack(false);
 			vibrator = (Vibrator) getApplicationContext().getSystemService(VIBRATOR_SERVICE);
-			targetNote = (TextView)findViewById(R.id.target_note_letter);
+			ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.spinner_targetNotes, 
+					R.layout.spinner_layout);
+			noteSelector.setAdapter(arrayAdapter);
+			noteSelector.setOnItemSelectedListener(uiController);
+			noteSelector.setSelection(Tuning.getNoteByName(defaultNote).getIndex());
 			targetFreq = (TextView)findViewById(R.id.target_note_freq);
-//			spinner.setOnItemSelectedListener(uiController);
 		} catch (Exception e) {
 			Toast.makeText(this, "The are problems with your microphone :(", Toast.LENGTH_LONG ).show();
 		}
@@ -96,7 +99,8 @@ public class MainActivity extends Activity {
     
     public void updateTargetNote(MusicNote note) {
     	targetFreq.setText(Double.toString(note.getFrequency()));
-    	targetNote.setText(note.getNote());
+    	noteSelector.setSelection(note.getIndex());
+//    	targetNote.setText(note.getNote());
     }
     
     public void displayFeedBack(boolean show) {

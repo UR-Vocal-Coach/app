@@ -10,5 +10,70 @@
     <string name="user_note_freq">262.5 hz</string>
     <string name="user_note_desc">user_note.png</string>
     <string name="action_settings">Settings</string>
-	<string name="target_note_set">Set target note\n(Press and hold)</string>
+    <string name="target_note_set">Set target note\n(Press and hold\nto sing)</string>
+    <string name="spinner_targetNote_prompt">Choose a target note</string>
+    <string name="default_note">C4</string>
+    <string-array name="spinner_targetNotes">
+        <item>C2</item>
+        <item>Db2/C#2</item>
+        <item>D2</item>
+        <item>Eb2/D#2</item>
+        <item>E2</item>
+        <item>F2</item>
+        <item>Gb2/F#2</item>
+        <item>G2</item>
+        <item>Ab2/G#2</item>
+        <item>A2</item>
+        <item>Bb2/A#2</item>
+        <item>B2</item>
+        <item>C3</item>
+        <item>Db3/C#3</item>
+        <item>D3</item>
+        <item>Eb3/D#3</item>
+        <item>E3</item>
+        <item>F3</item>
+        <item>Gb3/F#3</item>
+        <item>G3</item>
+        <item>Ab3/G#3</item>
+        <item>A3</item>
+        <item>Bb3/A#3</item>
+        <item>B3</item>
+        <item>C4</item>
+        <item>Db4/C#4</item>
+        <item>D4</item>
+        <item>Eb4/D#4</item>
+        <item>E4</item>
+        <item>F4/E#4</item>
+        <item>Gb4/F#4</item>
+        <item>G4</item>
+        <item>Ab4/G#4</item>
+        <item>A4</item>
+        <item>Bb4/A#4</item>
+        <item>B4</item>
+        <item>C5</item>
+        <item>Db5/C#5</item>
+        <item>D5</item>
+        <item>Eb5/D#5</item>
+        <item>E5</item>
+        <item>F5</item>
+        <item>Gb5/F#5</item>
+        <item>G5</item>
+        <item>Ab5/G#5</item>
+        <item>A5</item>
+        <item>Bb5/A#5</item>
+        <item>B5</item>
+        <item>C6</item>
+        <item>Db6/C#6</item>
+        <item>D6</item>
+        <item>Eb6/D#6</item>
+        <item>E6</item>
+        <item>F6/E#6</item>
+        <item>Gb6/F#6</item>
+        <item>G6</item>
+        <item>Ab6/G#6</item>
+        <item>A6</item>
+        <item>Bb6/A#6</item>
+ 		<item>B6</item>
+    </string-array>
+
 </resources>

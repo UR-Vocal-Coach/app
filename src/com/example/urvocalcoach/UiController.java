@@ -23,7 +23,6 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 	private boolean tactileFeed;
 	private boolean toneMatch;
 	private boolean show;
-	private Tuning tuning;
 	private MusicNote targetNote;
 	private MusicNote currentNote;
 	private boolean isTargetNote;
@@ -31,9 +30,8 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 	public UiController(MainActivity u) {
 		ui = u;
 		executor = Executors.newFixedThreadPool(4);
-		tuning = new Tuning();
-		targetNote = tuning.getNote(262.5);
-		currentNote = tuning.getNote(0);
+		targetNote = Tuning.getNote(262.5);
+		currentNote = Tuning.getNote(0);
 	}
 	
 	@Override
@@ -44,10 +42,10 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 				double frequency = FrequencySmoothener.getSmoothFrequency(result);
 				if(frequency > 0.0) {
 					if(isTargetNote) {
-						targetNote = tuning.getNote(frequency);
+						targetNote = Tuning.getNote(frequency);
 						ui.updateTargetNote(targetNote);
 					} else {
-						currentNote = tuning.getNote(frequency);
+						currentNote = Tuning.getNote(frequency);
 						ui.updateUserNote(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex());
 						toneMatch = false;
 						if(!show) {
@@ -94,7 +92,8 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		targetNote = tuning.getNote(position);		
+		targetNote = Tuning.getNote(position);	
+		ui.updateTargetNote(targetNote);
 	}
 
 	@Override

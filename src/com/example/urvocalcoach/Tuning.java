@@ -8,11 +8,11 @@ public class Tuning {
 	
 	private static final int TOP = 60;
 	
-	public Tuning() {
+	static {
 		initNoteMap();
 	}
 	
-	private void initNoteMap() {
+	private static void initNoteMap() {
 		double[] freqArray = new double[60];
 		StringBuilder sb = new StringBuilder(3);
 		freqArray[0] = 65.41;freqArray[1] = 69.30;freqArray[2] = 73.42;freqArray[3] = 77.78;freqArray[4] = 82.41;
@@ -59,7 +59,7 @@ public class Tuning {
 	}
 	
 	
-	public MusicNote getNote(double frequency) {
+	public static MusicNote getNote(double frequency) {
 		int low = - 1, high = TOP, curr = 0;
 		double highChk, lowChk, min;
 		MusicNote retVal;
@@ -98,8 +98,20 @@ public class Tuning {
 		return retVal;
 	}
 	
-	public MusicNote getNote(int index) {
+	public static MusicNote getNote(int index) {
 		return notesArray[index];
+	}
+	
+	public static MusicNote getNoteByName(String name) {
+		int i = 0;
+		while(i < notesArray.length) {
+			if(notesArray[i].getNote().equals(name)) {
+				break;
+			} else {
+				i++;
+			}
+		}
+		return notesArray[i];
 	}
 	
 	public static class MusicNote {

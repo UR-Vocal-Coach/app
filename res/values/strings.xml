@@ -5,10 +5,10 @@
     <string name="user_prompt">Please sing the target note</string>
     <string name="music_note_desc">music_note.png</string>
     <string name="target_note_letter">C4</string>
-    <string name="target_note_freq">261 hz</string>
+    <string name="target_note_freq">262.5 hz</string>
     <string name="user_note_letter">C4</string>
-    <string name="user_note_freq">261 hz</string>
+    <string name="user_note_freq">262.5 hz</string>
     <string name="user_note_desc">user_note.png</string>
     <string name="action_settings">Settings</string>
-
+	<string name="target_note_set">Set target note\n(Press and hold)</string>
 </resources>

@@ -6,7 +6,9 @@ import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +25,15 @@ public class MainActivity extends Activity {
 	
 	private ImageView userNoteImg;
 	
+	private TextView targetNote;
+	
+	private TextView targetFreq;
+	
 	private TextView userNote;
 	
 	private Vibrator vibrator;
 	
-	private long bottom;
-	
-	private long top;
+	private Spinner spinner;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +46,15 @@ public class MainActivity extends Activity {
 			userFreq = (TextView)findViewById(R.id.user_note_freq);
 			userNoteImg = (ImageView)findViewById(R.id.user_note);
 			userNote = (TextView)findViewById(R.id.user_note_letter);
+			Button button = (Button)findViewById(R.id.target_note_sing);
+			button.setOnClickListener(uiController);
+			button.setOnTouchListener(uiController);
+//			spinner = (Spinner)findViewById(R.id.user_note_letter);
 			this.displayFeedBack(false);
 			vibrator = (Vibrator) getApplicationContext().getSystemService(VIBRATOR_SERVICE);
-			top = findViewById(R.id.scale_marker_1).getTop();
-			bottom = findViewById(R.id.scale_marker_21).getTop();
+			targetNote = (TextView)findViewById(R.id.target_note_letter);
+			targetFreq = (TextView)findViewById(R.id.target_note_freq);
+//			spinner.setOnItemSelectedListener(uiController);
 		} catch (Exception e) {
 			Toast.makeText(this, "The are problems with your microphone :(", Toast.LENGTH_LONG ).show();
 		}
@@ -71,7 +80,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }   
     
-    public void displayMessage(MusicNote note, boolean tactileFeed, int position) {
+    public void updateUserNote(MusicNote note, boolean tactileFeed, int position) {
     	userFreq.setText(Double.toString(note.getFrequency()));
     	userNote.setText(note.getNote());
     	position = position * 25;
@@ -83,6 +92,11 @@ public class MainActivity extends Activity {
 //    		uiController.stopFeedBack();
     		vibrator.vibrate(200);
     	}
+    }
+    
+    public void updateTargetNote(MusicNote note) {
+    	targetFreq.setText(Double.toString(note.getFrequency()));
+    	targetNote.setText(note.getNote());
     }
     
     public void displayFeedBack(boolean show) {

@@ -98,6 +98,10 @@ public class Tuning {
 		return retVal;
 	}
 	
+	public MusicNote getNote(int index) {
+		return notesArray[index];
+	}
+	
 	public static class MusicNote {
 		
 		private double frequency;

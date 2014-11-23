@@ -5,14 +5,20 @@ import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+
 import com.example.urvocalcoach.AudioAnalyzer.AnalyzedSound;
 import com.example.urvocalcoach.Tuning.MusicNote;
 
 
-public class UiController implements Observer {
+public class UiController implements Observer, OnItemSelectedListener, OnTouchListener, OnClickListener {
 
 	private MainActivity ui;
-	private double frequency;
 	private ExecutorService executor;
 	private boolean tactileFeed;
 	private boolean toneMatch;
@@ -20,18 +26,11 @@ public class UiController implements Observer {
 	private Tuning tuning;
 	private MusicNote targetNote;
 	private MusicNote currentNote;
-	
-	private enum MessageClass {
-		TUNING_IN_PROGRESS,
-		WEIRD_FREQUENCY,
-		TOO_QUIET,
-		TOO_NOISY,
-	}
-	
+	private boolean isTargetNote;
+		
 	public UiController(MainActivity u) {
 		ui = u;
 		executor = Executors.newFixedThreadPool(4);
-		frequency = Double.NaN;
 		tuning = new Tuning();
 		targetNote = tuning.getNote(262.5);
 		currentNote = tuning.getNote(0);
@@ -42,15 +41,19 @@ public class UiController implements Observer {
 		if(who instanceof AudioAnalyzer) {
 			if(obj instanceof AnalyzedSound) {
 				AnalyzedSound result = (AnalyzedSound)obj;
-				frequency = FrequencySmoothener.getSmoothFrequency(result);
+				double frequency = FrequencySmoothener.getSmoothFrequency(result);
 				if(frequency > 0.0) {
-					currentNote = tuning.getNote(frequency);
-					ui.displayMessage(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex());
-//					ui.translateNotes(targetNote.getIndex() - currentNote.getIndex());
-					toneMatch = false;
-					if(!show) {
-						show = true;
-						ui.displayFeedBack(show);
+					if(isTargetNote) {
+						targetNote = tuning.getNote(frequency);
+						ui.updateTargetNote(targetNote);
+					} else {
+						currentNote = tuning.getNote(frequency);
+						ui.updateUserNote(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex());
+						toneMatch = false;
+						if(!show) {
+							show = true;
+							ui.displayFeedBack(show);
+						}						
 					}
 				} else {
 					if(show) {
@@ -71,7 +74,7 @@ public class UiController implements Observer {
 				while(tactileFeed) {
 					if(currentNote.getFrequency() == targetNote.getFrequency()) {
 						end = System.currentTimeMillis();
-						if(end - start >= 2000) {
+						if(end - start >= 1500) {
 							toneMatch = true;
 							//tactileFeed = false;
 						}
@@ -85,6 +88,30 @@ public class UiController implements Observer {
 	}
 	
 	public void stopTactileFeedBack() {
+		tactileFeed = false;
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+		targetNote = tuning.getNote(position);		
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
 		
+	}
+
+	@Override
+	public void onClick(View v) {
+		isTargetNote = false;
+		startTactileFeedBack();
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		stopTactileFeedBack();
+		isTargetNote = true;		
+		return false;
 	}
 }

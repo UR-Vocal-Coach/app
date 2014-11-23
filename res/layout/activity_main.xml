@@ -191,6 +191,17 @@
             android:text="@string/target_note_freq"
             android:textSize="@dimen/note_label_freq"
             android:textColor="#AA6568" />
+
+         <Button
+             android:id="@+id/target_note_sing"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_above="@+id/scale_marker_15"
+             android:layout_toRightOf="@+id/target_note"
+             android:text="@string/target_note_set"
+             android:textColor="#AA6568"
+             android:textSize="@dimen/note_label_freq" />
+
     </RelativeLayout>
     <ImageView
         android:id="@+id/user_note"

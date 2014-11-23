@@ -1,19 +1,15 @@
 package com.example.urvocalcoach;
 
 import java.util.Observable;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 
 import org.jtransforms.fft.DoubleFFT_1D;
-
-import com.example.urvocalcoach.AudioAnalyzer.AnalyzedSound.ReadingType;
-
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
+
+import com.example.urvocalcoach.AudioAnalyzer.AnalyzedSound.ReadingType;
 
 public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPositionUpdateListener {
 	public static final String TAG = "RealGuitarTuner";
@@ -23,10 +19,6 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 	
 	// Additive increase, very-additive decrease.
 	private static double notifyRateinS = 0.15; // should be 2
-	private static double minNotifyRate = 0.4; // at least every 0.4 s.
-	private static double maxNotifyRate = 
-		(double)audioDataSize/(double)AUDIO_SAMPLING_RATE; // This corresponds to 
-														   // real time analyzis.
 	
 	// Enough to pick up most of the frequencies.
 	private static final double MPM = 0.7;
@@ -41,8 +33,7 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 	private final CircularBuffer audioData;
 	private short [] audioDataTemp;
 	
-	private Lock analyzingData;
-	private double [] audioDataAnalyzis; // because java's f*caked up
+	private double [] audioDataAnalyzis;
 	DoubleFFT_1D fft_method;
 	private int wavelengths;
 	private double [] wavelength;
@@ -95,7 +86,7 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 		if(Math.random() < ConfigFlags.howOftenLogNotifyRate) 
 			Log.d(TAG, "Notify rate: " + notifyRateinS);
 		if(audioRecord.setPositionNotificationPeriod(
-				(int)(notifyRateinS*AUDIO_SAMPLING_RATE)) !=
+				(int)(notifyRateinS * AUDIO_SAMPLING_RATE)) !=
 			AudioRecord.SUCCESS) {
 			Log.e(TAG, "Invalid notify rate.");
 		}
@@ -121,7 +112,6 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 		audioDataAnalyzis = new double[4 * audioDataSize + 100];
 		wavelength = new double[audioDataSize];
 		audioData = new CircularBuffer(audioDataSize);
-		analyzingData = new ReentrantLock();
 		fft_method = new DoubleFFT_1D(audioDataSize);
 	}
 	
@@ -146,24 +136,7 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 							audioData.push(audioDataTemp[i]);
 						}
 					}
-//					if(!analyzingData.tryLock()) {
-//						notifyRateinS=Math.min(notifyRateinS + 0.01, minNotifyRate);
-//						onNotifyRateChanged();
-//						if(ConfigFlags.shouldLogAnalyzisTooSlow)
-//							Log.d(TAG, "Analyzing algorithm is too slow. Dropping sample");
-//							continue;
-//					} else {
-//						notifyRateinS=Math.max(notifyRateinS - 0.001, maxNotifyRate);
-//						onNotifyRateChanged();
-//					}
 					analyzisResult = getFrequency();
-//					// Make sure we dump audioDataAfter analyzis.
-					if(dumpAudioData) {
-						dumpAudioDataExecute();
-						dumpAudioData = false;
-						Log.d(TAG, "finished dumping.");
-					}
-//					analyzingData.unlock();
 					setChanged();
 			        // Log.e(TAG,"notified");
 				}
@@ -210,13 +183,6 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 	
 	private AnalyzedSound analyzisResult;
 	
-	
-	boolean dumpAudioData = false;
-	
-	public void dumpAudioDataRequest() {
-		dumpAudioData = true;
-	}
-	
 	public class ArrayToDump {
 		public double [] arr;
 		int elements;
@@ -226,41 +192,10 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 		}
 	}
 	
-	private void dumpAudioDataExecute() {
-		setChanged();
-		notifyObservers(new ArrayToDump(audioDataAnalyzis, elementsRead));
-	}
-	
 	// This is the periodic notification of AudioRecord listener.
 	@Override
 	public void onPeriodicNotification(AudioRecord recorder) {
 		notifyObservers(analyzisResult);
-//		notifyObservers(analyzisResult);
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				if(!analyzingData.tryLock()) {
-//					notifyRateinS=Math.min(notifyRateinS + 0.01, minNotifyRate);
-//					onNotifyRateChanged();
-//					if(ConfigFlags.shouldLogAnalyzisTooSlow)
-//						Log.d(TAG, "Analyzing algorithm is too slow. Dropping sample");
-//					return;
-//				} else {
-//					notifyRateinS=Math.max(notifyRateinS - 0.001, maxNotifyRate);
-//					onNotifyRateChanged();
-//				}
-//				analyzisResult = getFrequency();
-//				// Make sure we dump audioDataAfter analyzis.
-//				if(dumpAudioData) {
-//					dumpAudioDataExecute();
-//					dumpAudioData = false;
-//					Log.d(TAG, "finished dumping.");
-//				}
-//				analyzingData.unlock();
-//				setChanged();
-//		        // Log.e(TAG,"notified");
-//			}
-//		}).start();
 	}
 	
 	// square.

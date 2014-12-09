@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,8 @@ public class MainActivity extends Activity {
 	
 	private Spinner noteSelector;
 	
+	private SeekBar volumeBar;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,7 @@ public class MainActivity extends Activity {
 			userNoteImg = (ImageView)findViewById(R.id.user_note);
 			userNote = (TextView)findViewById(R.id.user_note_letter);
 			noteSelector = (Spinner)findViewById(R.id.spinner_targetNote);
+			volumeBar = (SeekBar)findViewById(R.id.user_volume_level);
 			analyzer.addObserver(uiController);
 			String defaultNote = this.getResources().getString(R.string.default_note);
 			Button button = (Button)findViewById(R.id.target_note_sing);
@@ -83,13 +87,18 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }   
     
-    public void updateUserNote(MusicNote note, boolean tactileFeed, int position) {
+    public void updateUserNote(MusicNote note, boolean tactileFeed, int position, int volume) {
     	userFreq.setText(Double.toString(note.getFrequency()));
     	userNote.setText(note.getNote());
     	position = position * 25;
     	userFreq.setTranslationY(position);
     	userNote.setTranslationY(position);
     	userNoteImg.setTranslationY(position);
+    	if(volume < volumeBar.getMax()) {
+    		volumeBar.setProgress(volumeBar.getMax()- (volumeBar.getMax() - volume));    		
+    	} else {
+    		volumeBar.setProgress(volumeBar.getMax());
+    	}
     	if(tactileFeed) {
 //    		analyzer.stop();
 //    		uiController.stopFeedBack();
@@ -107,11 +116,12 @@ public class MainActivity extends Activity {
     	if(show) {
     		userFreq.setVisibility(View.VISIBLE);
     		userNote.setVisibility(View.VISIBLE);
-    		userNoteImg.setVisibility(View.VISIBLE);    		
+    		userNoteImg.setVisibility(View.VISIBLE);
     	} else {
     		userFreq.setVisibility(View.INVISIBLE);
     		userNote.setVisibility(View.INVISIBLE);
     		userNoteImg.setVisibility(View.INVISIBLE);
+    		volumeBar.setProgress(0);
     	}
     }
     

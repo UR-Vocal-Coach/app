@@ -46,7 +46,8 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 						ui.updateTargetNote(targetNote);
 					} else {
 						currentNote = Tuning.getNote(frequency);
-						ui.updateUserNote(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex());
+						ui.updateUserNote(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex(), 
+								result.getLoudness());
 						toneMatch = false;
 						if(!show) {
 							show = true;

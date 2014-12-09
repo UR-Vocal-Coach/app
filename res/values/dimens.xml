@@ -15,5 +15,8 @@
     <!-- UI element font sizes -->
     <dimen name="note_label_letter">30sp</dimen>
     <dimen name="note_label_freq">12sp</dimen>
-
+	
+    <!-- UI seekbar dimension -->
+    <dimen name="seekbar_height">40dp</dimen>
+    <dimen name="seek_height">0dp</dimen>
 </resources>

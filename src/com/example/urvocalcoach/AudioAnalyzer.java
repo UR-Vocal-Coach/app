@@ -51,35 +51,24 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 			BIG_VARIANCE,
 			BIG_FREQUENCY
 		};
-		public double loudness;
+		private int loudness;
 		public boolean frequencyAvailable;
 		public double frequency;
 		public ReadingType error;
-		public AnalyzedSound(double l,ReadingType e) {
+		public AnalyzedSound(int l,ReadingType e) {
 			loudness = l;
 			frequencyAvailable = false;
 			error = e;
 		}
-		public AnalyzedSound(double l, double f) {
+		public AnalyzedSound(int l, double f) {
 			loudness = l;
 			frequencyAvailable = true;
 			frequency = f;
 			error = ReadingType.NO_PROBLEMS;
 		}
-		public void getDebug() {
-			if(error==ReadingType.NO_PROBLEMS) 
-				Log.d(TAG,"OK(" + frequency +")");
-			else if(error==ReadingType.ZERO_SAMPLES) 
-				Log.d(TAG,"Zero Samples (no wavelength established).");
-			else if(error==ReadingType.BIG_VARIANCE) 
-				Log.d(TAG,"Variance on wavelengh too big.");
-			else if(error==ReadingType.TOO_QUIET) 
-				Log.d(TAG,"Sound too quiet");
-			else if(error==ReadingType.BIG_FREQUENCY) 
-				Log.d(TAG,"Frequency bigger than " + MaxPossibleFrequency);
-			else  Log.e(TAG, "WTF - unknown AnalyzedSound message");
-		}
-
+		public int getLoudness() {
+			return loudness;
+		}		
 	}
 	
 	private void onNotifyRateChanged() {
@@ -98,9 +87,6 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 				AudioFormat.ENCODING_PCM_16BIT) * 2;
 		audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, AUDIO_SAMPLING_RATE, 
 									  AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
-		// Will notify us each time each notifyRateinThenthsOfS / 10 s.
-		// However, we should still continuously read data, otherwise it wouldn't
-		// work (I don't get why they did it).
 		
 		audioRecord.setRecordPositionUpdateListener(this);
 		
@@ -209,14 +195,6 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 	}
 	
 	private void computeAutocorrelation() {
-		// Fourier Transform to calculate autocorrelation. This kind of magic,
-		// but it works :) Also some stupid people confuse definition of forward
-		// transforms with inverse transforms. But the same people write multi-
-		// threaded apps for computing them, so we kind of like them :)
-		
-		// Below i use circular convolution theorem.
-		
-		// Should save some memory.
 		if(2*elementsRead != currentFftMethodSize) {
 			fft_method = new DoubleFFT_1D(2*elementsRead);
 			currentFftMethodSize = 2*elementsRead;
@@ -254,23 +232,7 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 			audioDataAnalyzis[i]=0;
 	}
 	
-	// Maybe will use it at some point
-	void shoothOutAudioData() {
-		double averageDistance = 0.0;
-		for(int i=1; i<elementsRead; ++i) 
-			averageDistance += Math.abs(audioDataAnalyzis[i]- audioDataAnalyzis[i-1]);
-		averageDistance/=elementsRead-1;
 		
-		int lastGoodPosition = 0;
-		for(int i=1; i<elementsRead; ++i) {
-			if(Math.abs(audioDataAnalyzis[i]- audioDataAnalyzis[lastGoodPosition]) <= 
-					2*averageDistance) {
-				audioDataAnalyzis[++lastGoodPosition] = audioDataAnalyzis[i];
-			}
-		}
-		elementsRead = lastGoodPosition+1;
-	}
-	
 	double getMeanWavelength() {
 		double mean = 0;
 		for(int i=0; i < wavelengths; ++i) 
@@ -308,7 +270,7 @@ public class AudioAnalyzer extends Observable implements AudioRecord.OnRecordPos
 	private AnalyzedSound getFrequency() {
 		elementsRead =
 			audioData.getElements(audioDataAnalyzis,0,audioDataSize);
-		double loudness = 0.0;
+		int loudness = 0;
 		for(int i=0; i<elementsRead; ++i)
 			loudness+=Math.abs(audioDataAnalyzis[i]);
 		loudness/=elementsRead;

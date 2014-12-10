@@ -16,9 +16,9 @@ import com.example.urvocalcoach.AudioAnalyzer.AnalyzedSound;
 import com.example.urvocalcoach.Tuning.MusicNote;
 
 
-public class UiController implements Observer, OnItemSelectedListener, OnTouchListener, OnClickListener {
+public class UiControllerDynamics implements Observer, OnItemSelectedListener, OnTouchListener, OnClickListener {
 
-	private MainActivity ui;
+	private DynamicsActivity ui;
 	private ExecutorService executor;
 	private boolean tactileFeed;
 	private boolean toneMatch;
@@ -26,16 +26,20 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 	private MusicNote targetNote;
 	private MusicNote currentNote;
 	private boolean isTargetNote;
+	private double startTime;
 		
-	public UiController(MainActivity u) {
+	public UiControllerDynamics(DynamicsActivity u) {
 		ui = u;
 		executor = Executors.newFixedThreadPool(4);
 		targetNote = Tuning.getNote(262.5);
 		currentNote = Tuning.getNote(0);
+		startTime = System.currentTimeMillis();
 	}
 	
 	@Override
 	public void update(Observable who, Object obj) {
+		double time = (System.currentTimeMillis() - startTime)*3;
+		ui.getTime(time);
 		if(who instanceof AudioAnalyzer) {
 			if(obj instanceof AnalyzedSound) {
 				AnalyzedSound result = (AnalyzedSound)obj;
@@ -47,7 +51,7 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 					} else {
 						currentNote = Tuning.getNote(frequency);
 						ui.updateUserNote(currentNote, toneMatch, targetNote.getIndex() - currentNote.getIndex(), 
-								result.getLoudness());
+								result.getLoudness(), time);
 						toneMatch = false;
 						if(!show) {
 							show = true;
@@ -65,7 +69,7 @@ public class UiController implements Observer, OnItemSelectedListener, OnTouchLi
 	}
 	
 	public void startTactileFeedBack() {
-		tactileFeed = true;
+		tactileFeed = false;
 		Thread tactileFeedBack = new Thread(new Runnable() {
 			@Override
 			public void run() {

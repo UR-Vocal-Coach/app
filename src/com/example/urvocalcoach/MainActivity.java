@@ -1,6 +1,7 @@
 package com.example.urvocalcoach;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.Menu;
@@ -19,22 +20,14 @@ import com.example.urvocalcoach.Tuning.MusicNote;
 
 public class MainActivity extends Activity {
 	
-	private UiController uiController;
-	
+	private UiControllerMain uiController;
 	private AudioAnalyzer analyzer;
-	
 	private TextView userFreq;
-	
 	private ImageView userNoteImg;
-	
 	private TextView targetFreq;
-	
 	private TextView userNote;
-	
 	private Vibrator vibrator;
-	
 	private Spinner noteSelector;
-	
 	private SeekBar volumeBar;
 	
     @Override
@@ -43,7 +36,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         try {
         	analyzer = new  AudioAnalyzer();
-        	uiController = new UiController(this);
+        	uiController = new UiControllerMain(this);
 			userFreq = (TextView)findViewById(R.id.user_note_freq);
 			userNoteImg = (ImageView)findViewById(R.id.user_note);
 			userNote = (TextView)findViewById(R.id.user_note_letter);
@@ -63,7 +56,7 @@ public class MainActivity extends Activity {
 			noteSelector.setSelection(Tuning.getNoteByName(defaultNote).getIndex());
 			targetFreq = (TextView)findViewById(R.id.target_note_freq);
 		} catch (Exception e) {
-			Toast.makeText(this, "The are problems with your microphone :(", Toast.LENGTH_LONG ).show();
+			Toast.makeText(this, "The are problems with your microphone :(" + e, Toast.LENGTH_LONG ).show();
 		}
     }
 
@@ -169,5 +162,13 @@ public class MainActivity extends Activity {
         if(uiController != null) {
         	uiController.stopTactileFeedBack();
         }
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+		finish();
 	}
 }

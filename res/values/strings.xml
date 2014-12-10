@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- General Strings -->
     <string name="app_name">URVocalCoach</string>
+    
+    <!-- Menu Strings -->
+    <string name="menu_title">UR Vocal Coach</string>
+    <string name="menu_button_pitch">Pitch Training</string>
+    <string name="menu_button_dynamics">Dynamics Training</string>
+    
+    <!-- Dynamics Training Strings -->
+    <string name="dynamics_title">Dynamics Training</string>
+    <string name="user_volume_desc">user volume image</string>
+    <string name="volume_text">volume</string>
+    <string name="dynamics_time">time</string>
+    
+    <!-- Pitch Training Strings -->
     <string name="user_prompt">Please sing the target note</string>
     <string name="music_note_desc">music_note.png</string>
     <string name="target_note_letter">C4</string>

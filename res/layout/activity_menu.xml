@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6ECDA" >
+    <!-- tools:context="com.example.urvocalcoach.MenuActivity" -->
+    
+   	<TextView
+        android:id="@+id/menuTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/menu_title"
+        android:textSize="16sp"
+        android:textColor="@color/text_color" />
+   	<Button
+   	    android:id="@+id/button_pitch"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:layout_below="@+id/menuTitle"
+   	    android:gravity="center"
+   	    android:layout_marginTop="36dp"
+   	    android:background="#F2E5CF"
+   	    android:text="@string/menu_button_pitch" />
+   	<Button
+   	    android:id="@+id/button_dynamics"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:layout_below="@+id/button_pitch"
+   	    android:gravity="center"
+   	    android:layout_marginTop="12dp"
+   	    android:background="#F2E5CF"
+   	    android:text="@string/menu_button_dynamics" />
+
+</RelativeLayout>

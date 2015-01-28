@@ -2,15 +2,257 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#F6ECDA"
     tools:context="com.example.urvocalcoach.MainActivity" >
-
     <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/user_prompt"
+        android:textSize="16sp"
+        android:textColor="@color/text_color" />
+    <RelativeLayout 
+        android:id="@+id/target_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/textView1" >
+        <ImageView 
+            android:id="@+id/scale_marker_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_1"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_2"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_3"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_4"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_5"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_6"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_7"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_8"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_9"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_10"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_target_line" android:contentDescription="@null"/>
+        <ImageView 
+            android:id="@+id/scale_marker_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_11"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_12"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_13"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_14"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_15"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_16"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_17"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_18"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_19"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null" />
+        <ImageView 
+            android:id="@+id/scale_marker_21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scale_marker_20"
+            android:layout_marginBottom="@dimen/scale_marker_marginBottom"
+            android:src="@drawable/scale_marker" android:contentDescription="@null"/>
+        <!-- Target note -->
+        <ImageView
+        	android:id="@+id/target_note"
+        	android:contentDescription="@string/music_note_desc"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="@dimen/target_note_y"
+        	android:layout_marginLeft="@dimen/target_note_x"
+        	android:src="@drawable/music_note" />
+        <!--
+        <TextView
+            android:id="@+id/target_note_letter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/target_note"
+            android:layout_marginTop="@dimen/target_note_y"
+            android:layout_marginLeft="@dimen/note_label"
+            android:text="@string/target_note_letter"
+            android:textSize="@dimen/note_label_letter"
+            android:textColor="@color/text_color" />
+        -->
+        <TextView 
+            android:id="@+id/target_note_freq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/target_note"
+            android:layout_below="@+id/spinner_targetNote"
+            android:layout_marginLeft="@dimen/note_label"
+            android:text="@string/target_note_freq"
+            android:textSize="@dimen/note_label_freq"
+            android:textColor="@color/text_color" />
+        <Spinner
+            android:id="@+id/spinner_targetNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/target_note"
+            android:layout_marginTop="@dimen/target_note_y"
+            android:prompt="@string/spinner_targetNote_prompt" />
+		<Button
+             android:id="@+id/target_note_sing"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_above="@+id/scale_marker_15"
+             android:layout_toRightOf="@+id/target_note"
+             android:text="@string/target_note_set"
+             android:textColor="@color/text_color"
+             android:textSize="@dimen/note_label_freq" />
+
+		<SeekBar
+		    android:id="@+id/user_volume_level"
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/seekbar_height"
+		    android:layout_below="@+id/scale_marker_17"
+		    android:layout_toRightOf="@+id/target_note"
+		    android:background="#F6ECDA"
+		    android:max="12000"
+		    android:progress="1"
+		    android:progressDrawable="@drawable/progress_fill"
+		    android:thumb="@drawable/seek_thumb" />
+
+    </RelativeLayout>
+    <!-- User note -->
+    <ImageView
+        android:id="@+id/user_note"
+        android:contentDescription="@string/user_note_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
+        android:layout_below="@id/textView1"
+        android:layout_marginLeft="@dimen/user_note_x"
+        android:layout_marginTop="@dimen/user_note_y"
+        android:src="@drawable/user_note" />
+    <TextView
+        android:id="@+id/user_note_letter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView1"
+        android:layout_toRightOf="@id/user_note"
+        android:layout_marginTop="@dimen/user_note_y"
+        android:layout_marginLeft="@dimen/note_label"
+        android:text="@string/user_note_letter"
+        android:textSize="@dimen/note_label_letter"
+        android:textColor="@color/text_color" />
+    <TextView 
+        android:id="@+id/user_note_freq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/user_note"
+        android:layout_below="@id/user_note_letter"
+        android:layout_marginLeft="@dimen/note_label"
+        android:text="@string/user_note_freq"
+        android:textSize="@dimen/note_label_freq"
+        android:textColor="@color/text_color" />
 </RelativeLayout>
